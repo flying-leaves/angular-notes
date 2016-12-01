@@ -1,0 +1,33 @@
+html,body,p{
+    margin:0;
+    padding:0;
+}
+@font-face {
+    font-family: 'iconfont';  /* project id："170357" */
+    src: url('http://at.alicdn.com/t/font_bd7wzzhpno2yb9.eot');
+    src: url('http://at.alicdn.com/t/font_bd7wzzhpno2yb9.eot') format('embedded-opentype'),
+    url('http://at.alicdn.com/t/font_bd7wzzhpno2yb9.woff') format('woff'),
+    url('http://at.alicdn.com/t/font_bd7wzzhpno2yb9.ttf') format('truetype'),
+    url('http://at.alicdn.com/t/font_bd7wzzhpno2yb9.svg#iconfont') format('svg');
+}
+.formBox{
+    width:200px;
+    margin:30px auto;
+}
+.formBox div{
+    margin:10px auto;
+    position: relative;
+}
+.formBox .error{
+    color: #f00;
+}
+.formBox input.error{
+    border:1px solid #f00;
+}
+p.success{
+    position: absolute;
+    top:20px;
+    right:30px;
+    color: #1af;
+    font-family: 'iconfont';
+}

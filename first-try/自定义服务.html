@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body ng-controller="myController">
+	<h2>淘宝搜索</h2>
+	<input type="text" ng-model="searchText">
+	<button ng-click="searchTextFunc()">淘宝搜索</button>
+	<ul>
+		<li ng-repeat="item in taobaoList">
+			{{ item[0] }}
+		</li>
+	</ul>
+
+	<h2>百度搜索</h2>
+	<input type="text" ng-model="searchBaiduText">
+	<button ng-click="searchBaiduFunc()">百度搜索</button>
+	<ul>
+		<li ng-repeat="item in baiduList">
+			{{ item }}
+		</li>
+	</ul>
+
+	<h2>list</h2>
+	<ul>
+		<li ng-repeat="item in listData">
+			<h5>{{ item.name }}</h5>
+			<p>{{ item.age }}</p>
+			<span ng-repeat="list in item.hobby">{{ list }}</span>
+		</li>
+	</ul>
+
+	<script src="../js/angular.min.js"></script>
+	<script>
+		angular.module('myApp', [])
+
+		.controller('myController', ['$scope','Search', function($scope,Search){
+			//淘宝搜索的函数
+			$scope.searchTextFunc = function(){
+				//首先得把Search自定义服务，把它注入到控制器里面
+				//来调用数据请求的函数
+				Search.taobaoSearch($scope.searchText);
+			};
+
+			//百度搜索
+			$scope.searchBaiduFunc = function(){
+				Search.baiduSearch($scope.searchBaiduText);
+			};
+
+			//调用请求list.json这个函数
+			Search.getList();
+				
+			//在这里需要拿到服务里得到的数据
+			//来接受淘宝数据的广播
+			// $on (监听，收听)
+			//$on('广播的名字',回调函数)
+			//jq .on
+			$scope.$on('taobaoData',function(event,data){
+				$scope.taobaoList = data;
+			});
+
+			//接收百度数据的广播
+			$scope.$on('baiduData', function(event,data){
+				$scope.baiduList = data;
+			});
+
+			//接收list数据
+			$scope.$on('listData', function(event,data){
+				$scope.listData = data
+			})
+
+		}])
+
+		//jq ajax
+		//自定义服务
+		//广播 $broadcast 就是传播数据
+		// 根作用域 $rootScope
+		//如何定义广播
+
+		.service('Search', ['$http','$rootScope', function($http,$rootScope){
+
+			return {
+					//淘宝搜索的接口
+				//给它定义了这么一个数据请求的函数
+				"taobaoSearch": function(text){
+					$http
+					.jsonp('https://suggest.taobao.com/sug',{
+						"params": {
+							"code": "utf-8",
+							"q": text,
+							"callback": "JSON_CALLBACK"
+						}
+					})
+					.then(function(response){
+						//请求成功的函数
+						console.log(response.data.result);
+
+						//定义广播，把拿到的淘宝数据，传出去
+						$rootScope.$broadcast('taobaoData',response.data.result)
+
+					},function(error){
+						//请求失败的函数
+						console.log(error);
+					})
+				},
+
+				//百度搜索的接口
+				"baiduSearch": function(text){
+					$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
+						"params": {
+							"wd": text,
+							"cb": "JSON_CALLBACK"
+						}
+					}).then(function(response){
+						console.log(response.data.s);
+						$rootScope.$broadcast('baiduData', response.data.s)
+					},function(error){
+						console.log(error)
+					})
+				},
+
+				//请求list接口
+				"getList": function(){
+					$http.get('list.json',{}).then(function(response){
+						console.log(response.data);
+
+						$rootScope.$broadcast('listData', response.data)
+					},function(error){
+						console.log(error)
+					})
+				}
+			}
+		}])
+	</script>
+</body>
+</html>

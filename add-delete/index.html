@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+    /*************刷新白屏*/
+        [ng\:cloak],[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak{
+            Display:none ! important;
+        }
+    </style>
+</head>
+<body ng-controller="myController">
+<span></span><span></span>
+<br/>
+<input type="text" ng-model="search"><button ng-click="addFun()">添加</button>
+
+<ul>
+    <li>左边列表</li>
+    <li ng-repeat="item in data track by $index"> <!--**************防止数组中字符串有相同值时无法push unshift  也可以以数组对象形式添加数据-->
+        <input type="checkbox" ng-model="checked"> <!--最好以数组对象形式保存checked值 防止耦合-->
+        <span ng-cloak>{{item}}</span> <!--防止刷新时候数据未加载出现闪屏 或者使用ng-bind-->
+        <button ng-show="checked" ng-click="deleteFun($index)">删除按钮</button>
+    </li>
+</ul>
+
+<ul>
+    <li>右边列表</li>
+    <li ng-repeat="item in del track by $index">
+        <input type="checkbox" ng-model="checked">
+        <span ng-cloak> {{item}}</span>
+        <button ng-show="checked" ng-click="addToLeft($index)">添加按钮</button>
+    </li>
+</ul>
+
+</body>
+<script src="../js/angular.min.js"></script>
+<script src="../js/angular-route.min.js"></script>
+<script>
+angular.module('myApp',[])
+    .controller('myController',['$scope',function($scope){
+        $scope.data = ['左边第一条数据'];
+        $scope.del = ['右边第一条数据'];
+
+        $scope.addFun = function () {
+            if ($scope.search){
+                $scope.data.push($scope.search);
+            }
+            $scope.search = '';
+        };
+//            $scope.addFun();
+
+        $scope.deleteFun = function (idx) {
+           // var delTXT= '';
+           // angular.forEach($scope.data,function (val,index) {
+           //     if (index == idx){
+           //         delTxt = val;
+           //     }
+           // });
+            var delTxt = $scope.data[idx];
+            $scope.data.splice(idx, 1);
+            $scope.del.push(delTxt);
+        };
+
+        $scope.addToLeft = function (idx) {
+//                angular.forEach($scope.del,function (val,index) {
+//                    if (index == idx){
+//                        $scope.search = val;
+//                    }
+//                });
+            $scope.search = $scope.del[idx];
+            $scope.del.splice(idx,1);
+            $scope.data.push($scope.search);
+            $scope.search = '';
+        };
+
+    }])
+</script>
+</html>

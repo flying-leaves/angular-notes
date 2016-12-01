@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div ng-controller="firstCtrl">
+		<input type="text" ng-model="hello">
+		<p>{{ hello }}</p>
+	</div>
+
+	<script src="../js/angular.js"></script>
+	<script>
+		angular.module('myApp', [])
+
+		//隐式注入
+		.controller('firstCtrl', ['$scope','$timeout',function($scope,$timeout){
+			$scope.hello = "angular";
+			console.log('hello,Angular!');
+
+			// 脏检测
+			// setInterval/setTimeout
+			// $apply
+
+			//在AngularJS上下文之外的任何地方修改了model，那么你就需要通过手动调用$apply来通知AngularJS,把改变渲染到view里面
+			setTimeout(function(){
+				$scope.$apply(
+					function(){
+						$scope.hello = "apply";
+				})
+			},4000);
+
+			//使用$timeout   service
+			$timeout(function(){
+				$scope.hello = "AngularJs";
+			},3000);
+
+			$timeout(function(){
+				console.log($scope.hello);
+			},2000);
+
+		}])
+	</script>
+</body>
+</html>

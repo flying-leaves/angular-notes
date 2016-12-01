@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-controller="firstController">
+
+<div ng-view style="width: 200px;height: 100px;border: 1px solid #f00;color: #ff0;">
+    
+</div>
+
+<ul>
+    <li><a href="#/home">首页</a></li>
+    <li><a href="#/log">登录</a></li>
+    <li><a href="#/sign">注册</a></li>
+</ul>
+
+
+<script src="js/angular.min.js"></script>
+<script src="js/angular-route.min.js"></script>
+<script>
+angular.module('myApp',['ngRoute'])
+    .config(['$routeProvider',function ($routeProvider) {
+        $routeProvider
+            .when('/home',{
+                template:'<h1>这是首页</h1><button ng-click="publicFunc()">点击全局功能</button>',
+                // controller:'homeCtrl'
+            })
+            .when('/log',{
+                templateUrl:'log.html',
+                // controller:'logCtrl'
+            })
+            .when('/sign',{
+                templateUrl:'sign',
+                // controller:'signCtrl'
+            })
+            //设置默认选择页面
+            .otherwise('/home')
+    }])
+    .controller('firstController',['$scope',function($scope){
+        $scope.publicFunc = function () {
+            alert('公共功能');
+        }
+    }])
+</script>
+<script type="text/ng-template" id="sign">
+    <h1>注册页面</h1>
+    <button ng-click="publicFunc()">点击全局功能</button>
+</script>
+</body>
+</html>

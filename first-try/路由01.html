@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body ng-controller="myController">
+	
+	<div>
+		ng-view  用来指定，路由切换的页面到底要显示在哪里
+		<ng-view></ng-view>
+	</div>
+
+	<script src="../js/angular.min.js"></script>
+	<script src="../js/angular-route.min.js"></script>
+	<script>
+		//第一步，把angular-route.min.js加载进来，必须在angularjs之后引入
+		//第二步，把ngRoute注入到myApp的模块里
+		angular.module('myApp', ['ngRoute'])
+
+		//config来配置(定制)路由
+		//第三步，定义config,并且注入$routerProvider
+		//$routerProvider 为我们提供了两个方法
+		// 01. when(当什么的时候)
+			//when方法里面有两个参数(第一个参数就是它的路径，配置对象)
+		// 02. otherwise(否则,默认页面)
+
+		.config(['$routeProvider',function($routeProvider){
+
+			$routeProvider
+
+			//访问的时候，在/前面一定要给它加上#号
+			.when('/login',{
+				//template 指定当前路径所要显示的内容
+				//templateUrl 指定当前路径索要显示的页面地址----> 相对地址
+				//template: "<h1>hello</h1>",
+				templateUrl: "template/login.html"
+			})
+			//otherwise()设置默认地址
+			.otherwise('/home')
+
+		}])
+
+		.controller('myController', ['$scope', function($scope){
+
+
+
+		}])
+	</script>
+</body>
+</html>

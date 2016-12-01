@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="yes" name="apple-touch-fullscreen">
+	<meta content="telephone=no,email=no" name="format-detection">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<title></title>
+</head>
+<body ng-controller="myController">
+	人民币
+	{{ 3000 | currency:'￥'}}<br />
+	日期
+	{{ 1400000000000 | date:'yyyy-MM-dd HH:mm:ss'}}<br />
+	大写
+	{{ 'hello' | uppercase}}<br />
+	小写
+	{{ 'HELLO' | lowercase}}<br />
+	小数 最多9位
+	{{ 30000000.1234567891111 | number:9}}<br />
+
+	<ul>
+		<li ng-repeat="item in list | orderBy: 'age':true">{{ item.name }}</li>
+	</ul>
+
+<script src="../js/angular.min.js"></script>
+<script>
+	angular.module('myApp', [])
+
+	.controller('myController', ['$scope', function($scope){
+		$scope.list = [
+			{
+				"name": "张三",
+				"age": 33
+			},{
+				"name": "风热",
+				"age": 45
+			},{
+				"name": "让人",
+				"age": 77
+			},{
+				"name": "问问",
+				"age": 22
+			},{
+				"name": "嘎嘎嘎",
+				"age": 55
+			}
+		]
+
+	}])
+</script>
+</body>
+</html>
